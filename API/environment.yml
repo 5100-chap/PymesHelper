@@ -210,6 +210,7 @@ dependencies:
       - protobuf==4.25.3
       - pygments==2.17.2
       - pymssql==2.3.0
+      - python-dotenv==1.0.1
       - requests==2.31.0
       - rich==13.7.1
       - six==1.16.0
