@@ -4,10 +4,42 @@ import streamlit as st
 
 # camara
 cap = cv2.VideoCapture(0)
-
 st.set_page_config(page_title="Camera Contour Test")
-frame_placeholder = st.empty()
-st.write("## Video con renderizacion de objetos")
+
+col1, col2 = st.columns(2, gap="large")
+
+with col1:
+   st.header("Imagen")
+   frame_placeholder = st.empty()
+
+   
+
+with col2:
+   st.header("Información")
+   
+   row1 = st.columns(1)
+   row2 = st.columns(1)
+
+   for col in row1 :
+    tile = col.container(height=120)
+    tile.subheader("Tipo de Fruta")
+    tile.text("Piña")
+
+
+
+    for col in row2 :
+        tile = col.container(height=120)
+        tile.subheader("Estado")
+        tile.text("Bueno")
+
+
+
+    for col in row2 :
+        tile = col.container(height=120)
+        tile.subheader("Precio")
+        tile.text("5$")
+ 
+
 
 while True:
     # lectura de frames
