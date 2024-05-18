@@ -33,12 +33,14 @@ while True:
         if cv2.contourArea(countour)>300:
             perimeter = cv2.arcLength(countour, True)
             circularity = 4 * np.pi * cv2.contourArea(countour) / (perimeter ** 2)
-            if 0.7 <= circularity <= 2.5:
+
+            if circularity <= 2.5:
                 # Calculo del centroide
                 M = cv2.moments(countour)
                 if M["m00"] != 0:
                     cX = int(M["m10"] / M["m00"])
                     cY = int(M["m01"] / M["m00"])
+
                 # verificacion si el centroide esta a la mitad derecha de la pantalla
                 if cY<frame.shape[1] / 2:
                     cv2.drawContours(frame, [countour], -1, (0, 0, 255), 2)

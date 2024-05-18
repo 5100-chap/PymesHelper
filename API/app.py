@@ -1,11 +1,11 @@
 # API de base (MODIFICAR ACORDE NECESIDADES DEL PROYECTO)
 from flask import Flask, request, jsonify, send_file
-from flask_cors import CORS
-from auth.AzureADManager import AzureADManager
-from auth.authManager import AuthManager
-from databases.DatabaseManager import DatabaseManager
-from databases.blobManager import BlobManager
-from config.varConfig import FLASK_SECRET_KEY
+# from flask_cors import CORS
+# from auth.AzureADManager import AzureADManager
+# from auth.authManager import AuthManager
+# from databases.DatabaseManager import DatabaseManager
+# from databases.blobManager import BlobManager
+# from config.varConfig import FLASK_SECRET_KEY
 from models.MLmodel import MLmodel
 import base64
 import numpy as np
@@ -14,138 +14,138 @@ import cv2
 
 # Variables globales
 # Cambiar estas variables en un .env
-url = "http://localhost"
-fronturl = "http://localhost"
+# url = "http://localhost"
+# fronturl = "http://localhost"
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+# CORS(app, supports_credentials=True)
 
-blob_manager = BlobManager()
-db_manager = DatabaseManager(isFreeDB=False)
-azure_ad_manager = AzureADManager(db_manager)
-auth_manager = AuthManager(url, db_manager, fronturl)
-ml_model = MLmodel(db_manager)
+# blob_manager = BlobManager()
+# db_manager = DatabaseManager(isFreeDB=False)
+# azure_ad_manager = AzureADManager(db_manager)
+# auth_manager = AuthManager(url, db_manager, fronturl)
+# ml_model = MLmodel(db_manager)
 
-app.secret_key = FLASK_SECRET_KEY
-
-
-offline_mode = False
-
-@app.route("/register", methods=["POST"])
-def register():
-    data = request.json
-    user_id = data.get("userID")
-    user_data = data
-    user_role = data.get("Rol")
-
-    try:
-        response = azure_ad_manager.register_user(user_id, user_data, user_role)
-        return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# app.secret_key = FLASK_SECRET_KEY
 
 
-@app.route("/update_user/<user_id>/<user_role>", methods=["PATCH"])
-def update_user(user_id, user_role):
-    update_data = request.json
-    try:
-        response = azure_ad_manager.update_user(user_id, update_data, user_role)
-        if response.status_code == 204:
-            return jsonify({"message": "User updated successfully"}), 204
-        else:
-            return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# offline_mode = False
+
+# @app.route("/register", methods=["POST"])
+# def register():
+#     data = request.json
+#     user_id = data.get("userID")
+#     user_data = data
+#     user_role = data.get("Rol")
+
+#     try:
+#         response = azure_ad_manager.register_user(user_id, user_data, user_role)
+#         return jsonify(response.json()), response.status_code
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/obtain_students_info", methods=["POST"])
-def obtain_students_info():
-    data = request.json
-    allStudents = True if data["type"] == "AllStudentRequest" else False
-    try:
-        if allStudents:
-            response = db_manager.get_students(allStudents=allStudents)
-        else:
-            response = db_manager.get_students(
-                allStudents=allStudents,
-                student_id=data["oid"],
-                class_id=data["Clase"],
-                course_id=data["Curso"],
-            )
-        return jsonify(response), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# @app.route("/update_user/<user_id>/<user_role>", methods=["PATCH"])
+# def update_user(user_id, user_role):
+#     update_data = request.json
+#     try:
+#         response = azure_ad_manager.update_user(user_id, update_data, user_role)
+#         if response.status_code == 204:
+#             return jsonify({"message": "User updated successfully"}), 204
+#         else:
+#             return jsonify(response.json()), response.status_code
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/obtain_clases_info", methods=["POST"])
-def obtain_clases_info():
-    data = request.json
-    try:
-        response = db_manager.get_user_clases(
-            user_id=data["oid"], user_role=data["user_role"]
-        )
-        return jsonify(response), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# @app.route("/obtain_students_info", methods=["POST"])
+# def obtain_students_info():
+#     data = request.json
+#     allStudents = True if data["type"] == "AllStudentRequest" else False
+#     try:
+#         if allStudents:
+#             response = db_manager.get_students(allStudents=allStudents)
+#         else:
+#             response = db_manager.get_students(
+#                 allStudents=allStudents,
+#                 student_id=data["oid"],
+#                 class_id=data["Clase"],
+#                 course_id=data["Curso"],
+#             )
+#         return jsonify(response), 200
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/alumnos/foto", methods=["POST"])
-def alumnos_foto():
-    data = request.form.to_dict()
-    file = request.files["file"]
-    link = ""
-
-    try:
-        rol_extraido = data["Rol"]
-        oid_extraido = data["user_oid"]
-        link = blob_manager.upload_image(file, file.filename)
-
-        if rol_extraido in ["Admin", "Mod", "Dueño", "Profesor"]:
-            # Actualizar la foto del estudiante con el rol extraído
-            response = db_manager.update_student_photo(
-                student_id=data["oid"], photo_url=link, user_role=rol_extraido
-            )
-        elif rol_extraido == "Alumno":
-            # Actualizar la foto del estudiante con el rol y oid extraídos
-            response = db_manager.update_student_photo(
-                student_id=data["oid"],
-                photo_url=link,
-                user_role=rol_extraido,
-                user_id=oid_extraido,
-            )
-        else:
-            return jsonify({"error": "Rol inválido"}), 400
-
-        return jsonify(response), 200
-    except Exception as e:
-        blob_manager.delete_image(link)
-        return jsonify({"error": str(e)}), 500
+# @app.route("/obtain_clases_info", methods=["POST"])
+# def obtain_clases_info():
+#     data = request.json
+#     try:
+#         response = db_manager.get_user_clases(
+#             user_id=data["oid"], user_role=data["user_role"]
+#         )
+#         return jsonify(response), 200
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/delete_user/<user_id>/<user_role>", methods=["DELETE"])
-def delete_user(user_id, user_role):
-    try:
-        response = azure_ad_manager.delete_user(user_id, user_role)
-        if response.status_code == 204:
-            return jsonify({"message": "User deleted successfully"}), 204
-        else:
-            return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# @app.route("/alumnos/foto", methods=["POST"])
+# def alumnos_foto():
+#     data = request.form.to_dict()
+#     file = request.files["file"]
+#     link = ""
+
+#     try:
+#         rol_extraido = data["Rol"]
+#         oid_extraido = data["user_oid"]
+#         link = blob_manager.upload_image(file, file.filename)
+
+#         if rol_extraido in ["Admin", "Mod", "Dueño", "Profesor"]:
+#             # Actualizar la foto del estudiante con el rol extraído
+#             response = db_manager.update_student_photo(
+#                 student_id=data["oid"], photo_url=link, user_role=rol_extraido
+#             )
+#         elif rol_extraido == "Alumno":
+#             # Actualizar la foto del estudiante con el rol y oid extraídos
+#             response = db_manager.update_student_photo(
+#                 student_id=data["oid"],
+#                 photo_url=link,
+#                 user_role=rol_extraido,
+#                 user_id=oid_extraido,
+#             )
+#         else:
+#             return jsonify({"error": "Rol inválido"}), 400
+
+#         return jsonify(response), 200
+#     except Exception as e:
+#         blob_manager.delete_image(link)
+#         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/login")
-def login():
-    return auth_manager.login()
+# @app.route("/delete_user/<user_id>/<user_role>", methods=["DELETE"])
+# def delete_user(user_id, user_role):
+#     try:
+#         response = azure_ad_manager.delete_user(user_id, user_role)
+#         if response.status_code == 204:
+#             return jsonify({"message": "User deleted successfully"}), 204
+#         else:
+#             return jsonify(response.json()), response.status_code
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/login-redirect")
-def login_redirect():
-    return auth_manager.login_redirect()
+# @app.route("/login")
+# def login():
+#     return auth_manager.login()
 
 
-@app.route("/logout")
-def logout():
-    return jsonify({"logout": auth_manager.logout()})
+# @app.route("/login-redirect")
+# def login_redirect():
+#     return auth_manager.login_redirect()
+
+
+# @app.route("/logout")
+# def logout():
+#     return jsonify({"logout": auth_manager.logout()})
 
 
 @app.route("/receive_fps_ml", methods=["POST"])
@@ -262,19 +262,19 @@ def calcular_dias_habiles():
         return jsonify({"error": str(e)}), 500
     
     
-@app.route("/azure_login", methods=["POST"])
-def azure_login():
-    try:
-        data = request.json
-        jwt = data.get("jwt")
-        link = auth_manager.azure_function_login(jwt)
-        return jsonify({"message": link}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# @app.route("/azure_login", methods=["POST"])
+# def azure_login():
+#     try:
+#         data = request.json
+#         jwt = data.get("jwt")
+#         link = auth_manager.azure_function_login(jwt)
+#         return jsonify({"message": link}), 200
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
     
 
 if __name__ == "__main__":
-    if(offline_mode):
-        ml_model.process_video(0)
-    else:
+    # if(offline_mode):
+    #     ml_model.process_video(0)
+    # else:
         app.run(debug=True, threaded=True)
