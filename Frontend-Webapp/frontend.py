@@ -1,13 +1,38 @@
 import cv2
 import numpy as np
 import streamlit as st
+import io
+import requests
+import dotenv
+import os
+
+# dotenv
+dotenv.load_dotenv()
 
 # camara
 cap = cv2.VideoCapture(0)
 
 st.set_page_config(page_title="Camera Contour Test")
 frame_placeholder = st.empty()
+response_placeholder = st.empty()
 st.write("## Video con renderizacion de objetos")
+
+def send_image(*, frame, ext: str="jpg"):
+    try:
+        worked, data = cv2.imencode(f'.{ext}', frame)
+        if not worked:
+            raise Exception(f"Error al querer convertir un frame en una imagen en el formato {ext}")
+        file = io.BytesIO(data)
+        file.name = f"image.{ext}"
+        file.seek(0)
+
+        files = {'file': file}
+        name = os.getenv('URL')
+        respond = requests.post(url=f'{name}/file', files=files)
+        
+        return respond.text
+    except Exception as e:
+        return f"||ERROR||:\n{str(e)}"
 
 while True:
     # lectura de frames
@@ -43,6 +68,7 @@ while True:
 
                 # verificacion si el centroide esta a la mitad derecha de la pantalla
                 if cY<frame.shape[1] / 2:
+                    response_placeholder.write(f"## {send_image(frame=frame, ext='png')}")
                     cv2.drawContours(frame, [countour], -1, (0, 0, 255), 2)
                 
     frame_placeholder.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels='RGB')

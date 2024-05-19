@@ -15,7 +15,7 @@ def send_file():
         file = request.files["file"]
         # print(f"The name of the file: {file.filename}")
         # print(f"{file.filename.split('.')[1]}")
-        if file.filename.split('.')[1] not in image_extensions:
+        if file.filename.split('.')[-1] not in image_extensions:
             raise Exception(f"Debe utilizar un formato de imagen adecuado, los aceptados son: {image_extensions}")
         return f"Respuesta del modelo: work in progress..."
     except Exception as e:
