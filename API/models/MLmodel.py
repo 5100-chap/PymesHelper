@@ -1,6 +1,6 @@
 import os
-from models.faceClass import FaceClass
-from models.postureClass import PostureClass
+# from models.faceClass import FaceClass
+# from models.postureClass import PostureClass
 import cv2
 import os
 import datetime
@@ -15,7 +15,7 @@ class MLmodel:
         Parámetros:
         - db_manager: objeto que maneja la conexión con la base de datos.
         """
-        self.posture_class = PostureClass()
+        # self.posture_class = PostureClass()
         self.db_manager = db_manager
         self.estudiantes_foto = {}
         self.estudiantes = self.db_manager.get_estudiantes()
@@ -56,7 +56,7 @@ class MLmodel:
                 # Descargar la imagen y guardarla en la carpeta correspondiente
                 urllib.request.urlretrieve(imagen_url, imagen_path)
         # Se crea una instancia de la clase FaceClass
-        self.face_class = FaceClass(faces_dir)
+        # self.face_class = FaceClass(faces_dir)
         self.face_dir = faces_dir
         
     def update_metrics(self, total_metrics, new_metrics):
