@@ -2,9 +2,14 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.bat
+.streamlit/
 
+certificate.crt
+privatekey.key
 # C extensions
 *.so
+Classification_Model.p
 
 # Distribution / packaging
 .Python
