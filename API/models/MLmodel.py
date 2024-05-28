@@ -2,33 +2,49 @@ import pickle
 import numpy as np
 import cv2
 
+
 class ClassificationModel:
     def __init__(self, model_path):
-        # Cargar el modelo desde el archivo
-        with open(model_path, 'rb') as file:
+        # Load the model from the file
+        with open(model_path, "rb") as file:
             self.model = pickle.load(file)
-    
+        self.categories = [
+            "FreshApple",
+            "FreshBanana",
+            "FreshGuava",
+            "FreshJujube",
+            "FreshOrange",
+            "FreshPomegranate",
+            "FreshStrawberry",
+            "RottenApple",
+            "RottenBanana",
+            "RottenGuava",
+            "RottenJujube",
+            "RottenOrange",
+            "RottenPomegranate",
+            "RottenStrawberry",
+        ]
+
     def classify(self, image):
-        # Preprocesar la imagen
+        # Preprocess the image
         img = self.preprocess_image(image)
-        
-        # Realizar la clasificación utilizando el modelo
+
+        # Perform classification using the model
         prediction = self.model.predict(img)
-        
-        # Devolver el resultado de la clasificación
-        return prediction[0]
-    
+
+        # Get the predicted category
+        predicted_category = self.categories[prediction[0]]
+
+        return predicted_category
+
     def preprocess_image(self, image):
-        # Leer la imagen utilizando OpenCV
-        img = cv2.imdecode(np.fromstring(image.read(), np.uint8), cv2.IMREAD_COLOR)
-        
-        # Redimensionar la imagen al tamaño requerido por el modelo
-        img = cv2.resize(img, (224, 224))
-        
-        # Normalizar los valores de píxeles
-        img = img / 255.0
-        
-        # Añadir una dimensión adicional para el batch
-        img = np.expand_dims(img, axis=0)
-        
-        return img
+        # Resize the image to the required size (150x150)
+        img_resized = cv2.resize(image, (150, 150))
+
+        # Flatten the image data
+        flat_data = img_resized.flatten()
+
+        # Reshape the flattened data into a 2D array
+        flat_data = flat_data.reshape(1, -1)
+
+        return flat_data

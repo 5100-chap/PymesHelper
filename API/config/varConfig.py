@@ -5,7 +5,7 @@ import os
 load_dotenv()
 
 # Configuración del modelo
-MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models', 'Classification_model.p')
+MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models', 'Classification_Model.p')
 
 # Configuración de SSL
 SSL_CERT = os.environ.get('SSL_CERT')
