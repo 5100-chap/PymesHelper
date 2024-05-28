@@ -5,46 +5,46 @@ import cv2
 
 class ClassificationModel:
     def __init__(self, model_path):
-        # Load the model from the file
+        # Cargar el modelo de clasificación
         with open(model_path, "rb") as file:
             self.model = pickle.load(file)
         self.categories = [
-            "FreshApple",
-            "FreshBanana",
-            "FreshGuava",
-            "FreshJujube",
-            "FreshOrange",
-            "FreshPomegranate",
-            "FreshStrawberry",
-            "RottenApple",
-            "RottenBanana",
-            "RottenGuava",
-            "RottenJujube",
-            "RottenOrange",
-            "RottenPomegranate",
-            "RottenStrawberry",
+            "Manzana Fresca",
+            "Platano Fresco",
+            "Guayaba Fresca",
+            "Azufaifa Fresca",
+            "Naranja Fresca",
+            "Granada Fresca",
+            "Fresa Fresca",
+            "Manzana Podrida",
+            "Platano Podrido",
+            "Guayaba Podrida",
+            "Azufaifa Podrida",
+            "Naranja Podrida",
+            "Granada Podrida",
+            "Fresa Podrida",
         ]
 
     def classify(self, image):
-        # Preprocess the image
+        # Preprocesa la imagen
         img = self.preprocess_image(image)
 
-        # Perform classification using the model
+        # Realiza la predicción
         prediction = self.model.predict(img)
 
-        # Get the predicted category
+        # Consigue la prediccion
         predicted_category = self.categories[prediction[0]]
 
         return predicted_category
 
     def preprocess_image(self, image):
-        # Resize the image to the required size (150x150)
+        # Redimensiona la imagen a 150x150
         img_resized = cv2.resize(image, (150, 150))
 
-        # Flatten the image data
+        # Aplana los datos de la imagen
         flat_data = img_resized.flatten()
 
-        # Reshape the flattened data into a 2D array
+        # Redefine la forma de los datos
         flat_data = flat_data.reshape(1, -1)
 
         return flat_data
