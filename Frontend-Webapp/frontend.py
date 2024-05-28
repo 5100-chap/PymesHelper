@@ -22,7 +22,7 @@ camera_processor = CameraProcessor(api_url=os.getenv("API_URL"))
 webrtc_ctx = webrtc_streamer(
     key="example",
     mode=WebRtcMode.SENDRECV,
-    video_processor_factory=VideoTransformer(camera_processor=camera_processor),
+    video_processor_factory=lambda: VideoTransformer(camera_processor=camera_processor),
     media_stream_constraints={"video": True, "audio": False},
     video_html_attrs=VideoHTMLAttributes(
         autoPlay=True,
