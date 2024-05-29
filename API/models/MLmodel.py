@@ -1,6 +1,6 @@
 import pickle
 import numpy as np
-import cv2
+from skimage.transform import resize
 
 
 class ClassificationModel:
@@ -39,7 +39,7 @@ class ClassificationModel:
 
     def preprocess_image(self, image):
         # Redimensiona la imagen a 150x150
-        img_resized = cv2.resize(image, (150, 150))
+        img_resized = resize(image,(150,150,3))
 
         # Aplana los datos de la imagen
         flat_data = img_resized.flatten()

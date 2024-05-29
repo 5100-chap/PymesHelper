@@ -7,7 +7,7 @@ class CameraProcessor:
     def __init__(self, api_url):
         self.api_url = api_url
 
-    def send_video(self, frame, ext='jpg'):
+    def send_video(self, frame, ext='png'):
         try:
             _, video_data = cv2.imencode(f".{ext}", frame)
             video_bytes = base64.b64encode(video_data)
@@ -47,4 +47,7 @@ class CameraProcessor:
                     if cY < frame.shape[1] / 2:
                         cv2.drawContours(frame, [contour], -1, (0, 0, 255), 2)
 
+        return frame
+    
+    def process_frame_og(self, frame):
         return frame

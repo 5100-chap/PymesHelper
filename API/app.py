@@ -22,6 +22,9 @@ def classify_video():
         # Leer el video con OpenCV
         video = cv2.imdecode(np.frombuffer(video_bytes, np.uint8), cv2.IMREAD_COLOR)
         
+        # Guardar la imagen en un archivo temporal
+        cv2.imwrite('temp_image.png', video)
+        
         # Realizar la clasificación utilizando el modelo
         result = classification_model.classify(video)
         
