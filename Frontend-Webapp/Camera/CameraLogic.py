@@ -1,10 +1,12 @@
+# En el archivo CameraLogic.py
 import cv2
-from streamlit_webrtc import VideoTransformerBase
+from streamlit_webrtc import VideoProcessorBase, VideoTransformerBase
+import av
+
 class CameraLogic:
     def __init__(self):
         pass
     
-    #Cambiar a logica de webrtc
     def list_cameras(self):
         available_cameras = []
         for i in range(10):
@@ -13,16 +15,17 @@ class CameraLogic:
                 available_cameras.append(i)
                 cap.release()
         return available_cameras
-
 class VideoTransformer(VideoTransformerBase):
     def __init__(self, camera_processor):
         self.camera_processor = camera_processor
+        self.last_processed_frame = None
 
-    def transform(self, frame):
+    def recv(self, frame, original = False):
         img = frame.to_ndarray(format="bgr24")
-
-        # Procesar el frame aquí
-        classification = self.camera_processor.send_video(img)
-        processed_frame = self.camera_processor.process_frame(img)
-
-        return cv2.cvtColor(processed_frame, cv2.COLOR_BGR2RGB)
+        if original == True:
+            processed_img = self.camera_processor.process_frame_og(img)
+        else:
+            processed_img = self.camera_processor.process_frame(img)
+        # Almacenar el último frame procesado
+        self.last_processed_frame = processed_img  
+        return av.VideoFrame.from_ndarray(processed_img, format="bgr24")
