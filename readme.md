@@ -6,6 +6,7 @@ La carpeta principal de este repositorio contiene los siguientes archivos y carp
 
 - Files
    - [README.md](./README.md): Este archivo contiene información relevante respecto al proyecto
-   - (Agregar futuros archivos y su descripccion aqui en un formato similar)
+   - 
 - Folders
-  - (Agregar Folders aqui)
+  - [Frontend-Webapp](./Frontend-Webapp): Incluye todo lo relacionado al frontend
+  - [API](./API): Incluye todo lo relacionado a los archivos de Flask para la construcción de la API
