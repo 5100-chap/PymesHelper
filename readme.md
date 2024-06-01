@@ -6,7 +6,7 @@ La carpeta principal de este repositorio contiene los siguientes archivos y carp
 
 - Files
    - [README.md](./README.md): Este archivo contiene información relevante respecto al proyecto
-   - 
 - Folders
   - [Frontend-Webapp](./Frontend-Webapp): Incluye todo lo relacionado al frontend
   - [API](./API): Incluye todo lo relacionado a los archivos de Flask para la construcción de la API
+  - [Entrenamiento](./Entrenamiento): Incluye el Notebook usado para el entrenamiento del modelo (Entrenado originalmente en Google Collab)
