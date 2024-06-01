@@ -1,9 +1,42 @@
-## Estructura del backend
-La carpeta contiene los siguientes archivos y carpetas:
-(Documentación de las carpetas y archivos clave aquí)
+# API
 
-### Peticiones y llamadas al Back Aquí
-- Petición para recibir un archivo de imágen, en formato *.png de preferencia
+Esta carpeta contiene todos los archivos y código relacionados con la API construida con Flask. La API es el backend del proyecto y se encarga de manejar las solicitudes y respuestas, interactuar con la base de datos y proporcionar los datos necesarios al frontend.
 
-### Pruebas de testeo
-Para probar la petición, utilice "postman" o cualquier otro software para lo mismo, y llame a la direccion [http://127.0.0.1:5000/file] como un "POST", y en el cuerpo en forma de "forms", coloque que un valor sea de tipo archivo y suba un archivo de imagen para las pruebas
+## Estructura
+
+- Folders
+    - [config](./config): Contiene los archivos de configuración de la API.
+    - [models](./models): Contiene el manejo del modelo utilizados por la API.
+
+- Files
+    - [app.py](./app.py): Archivo principal de la aplicación Flask que define las rutas y la lógica de la API.
+    - [varConfig.py](./config/varConfig.py): Archivo de configuración de variables.
+    - [README.md](./README.md): Este archivo README.
+## Requisitos
+
+- Python 3.x
+- Flask
+- opencv-python
+- numpy
+- scikit-image
+- matplotlib
+- python-dotenv
+- scikit-learn
+
+
+## Instalación
+
+1. Clona este repositorio.
+2. Navega hasta la carpeta [API](../API).
+3. Crea un entorno virtual de Python e instala las dependencias
+
+## Ejecución
+
+Para ejecutar la API, sigue estos pasos:
+
+1. Asegúrate de estar en la carpeta [API](../API).
+2. Entre a la carpeta [config](./config/)
+3. Asegure de actualizar el syslink de [models](./config/models) a la ruta absoluta en donde esta su carpeta [models](./models/)
+   1. Alternativamente puede modificar la linea dentro del archivo [varConfig/py](./config/varConfig.py) 'MODEL_PATH = os.path.join(os.path.dirname(\_\_file\_\_), 'models', 'Classification_Model.p')' a 'MODEL_PATH = '/Direccion/Absoluta/hacia/el/modelo/Classification_Model.p''
+4. Volver a la carpeta [API](../API/)
+5. Ejecuta el siguiente comando: flask run app.py
