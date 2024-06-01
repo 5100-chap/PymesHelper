@@ -39,14 +39,21 @@ Se recomienda que para evitar algun tipo de problemas se corra la pagina con HTT
 2. Agregue un archivo llamado config.toml en donde se tenga lo siguiente:
 
 [server]
+
 headless = true
+
 enableCORS = true
+
 port = 8501
+
 sslCertFile = "path/to/certificate.crt"
+
 sslKeyFile = "path/to/privatekey.key"
 
 [browser]
+
 serverAddress = "127.0.0.1"
+
 serverPort = 8501
 
 Puede configurar los puertos y la dirección del servidor acorde a lo que se requiera
