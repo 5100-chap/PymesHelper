@@ -14,7 +14,7 @@ Esta carpeta contiene todos los archivos y código relacionados con el frontend 
 ## Requisitos
 
 - Python 3.x
-- Streamlit
+- streamlit
 - numpy
 - python-dotenv
 - opencv-python
@@ -24,12 +24,11 @@ Esta carpeta contiene todos los archivos y código relacionados con el frontend 
 ## Instalación
 
 1. Clona este repositorio.
-2. Navega hasta la carpeta [Frontend-Webapp](../Frontend-Webapp).
 3. Crea un entorno virtual de Python e instala las dependencias.
 
 ## Ejecución
 
 Para ejecutar el frontend, sigue estos pasos:
 
-1. Asegúrate de estar en la carpeta [Frontend-Webapp](../Frontend-Webapp).
-2. Ejecuta el siguiente comando: streamlit run frontend.py
+1. Asegúrate de estar en la carpeta [raiz](../).
+2. Ejecuta el siguiente comando: streamlit run ./Frontend-Webapp/frontend.py
