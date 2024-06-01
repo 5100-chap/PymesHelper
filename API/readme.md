@@ -30,6 +30,7 @@ Esta carpeta contiene todos los archivos y código relacionados con la API const
 2. Navega hasta la carpeta [API](../API).
 3. Crea un entorno virtual de Python e instala las dependencias
 4. Obtener el modelo, se puede usar de guia el notebook adentro de la carpeta [Entrenamiento](../Entrenamiento), y guardarlo en la carpera [models](./config/models) como Classification_Model.p
+    1. Alternativamente, puede descargar el modelo que se uso a través de [este hipervinculo](https://www.mediafire.com/file/jijt66y8q6u82dj/Classification_Model.7z/file)
 
 ## Ejecución
 
