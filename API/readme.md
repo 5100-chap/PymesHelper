@@ -39,5 +39,5 @@ Para ejecutar la API, sigue estos pasos:
 2. Entre a la carpeta [config](./config/)
 3. Asegure de actualizar el syslink de [models](./config/models) a la ruta absoluta en donde esta su carpeta [models](./models/)
    1. Alternativamente puede modificar la linea dentro del archivo [varConfig.py](./config/varConfig.py) 'MODEL_PATH = os.path.join(os.path.dirname(\_\_file\_\_), 'models', 'Classification_Model.p')' a 'MODEL_PATH = '/Direccion/Absoluta/hacia/el/modelo/Classification_Model.p''
-4. Volver a la carpeta [API](../API/)
-5. Ejecuta el siguiente comando: flask run app.py
+4. Volver a la carpeta [raiz](../)
+5. Ejecuta el siguiente comando: flask run API/app.py
